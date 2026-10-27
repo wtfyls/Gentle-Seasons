@@ -80,6 +80,8 @@ The compiled mod jar is produced in `build/libs/`. GitHub Actions runs the targe
 - [Latest GitHub Actions runs](https://github.com/wtfyls/Gentle-Seasons/actions)
 - [Minecraft / loader support matrix](SUPPORT_MATRIX.md)
 - [Contributing guide](CONTRIBUTING.md)
+- [Repository page and release setup checklist](docs/GITHUB_PAGE_AND_RELEASE_SETUP.md)
+- [v1.0.0 draft release notes](docs/releases/v1.0.0-DRAFT.md)
 
 ## 📦 Downloads
 

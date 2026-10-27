@@ -1,100 +1,78 @@
-# 🌿 Gentle Seasons
+# Gentle Seasons
 
 [![Build](https://github.com/wtfyls/Gentle-Seasons/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/wtfyls/Gentle-Seasons/actions/workflows/build.yml)
-[![Minecraft](https://img.shields.io/badge/Minecraft-1.20.1-62A744)](https://www.minecraft.net/)
-[![Forge](https://img.shields.io/badge/Forge-47.x-orange)](https://files.minecraftforge.net/)
-[![Java](https://img.shields.io/badge/Java-17-blue)](https://adoptium.net/)
-[![CurseForge](https://img.shields.io/badge/CurseForge-Gentle%20Seasons-orange?logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/labs-gentle-seasons)
-[![License: ARR](https://img.shields.io/badge/License-All%20Rights%20Reserved-lightgrey)](LICENSE)
+![Minecraft 1.20.1](https://img.shields.io/badge/Minecraft-1.20.1-62A744)
+![Forge 47.x](https://img.shields.io/badge/Forge-47.x-orange)
+![Java 17](https://img.shields.io/badge/Java-17-blue)
+[![CurseForge](https://img.shields.io/badge/CurseForge-page-orange?logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/labs-gentle-seasons)
 
-**Gentle Seasons** is a cozy gameplay and quality-of-life mod for Minecraft 1.20.1 Forge. It slows down daylight, shortens the night, and gives exposed crops a chance to grow an extra stage when natural growth happens during rain.
+Gentle Seasons is a small cozy mod for Minecraft 1.20.1 Forge.
 
-The goal is to make survival feel a little gentler without replacing the familiar Minecraft day/night and farming loop.
+## Features
 
-> **Development status:** Forge 1.20.1 currently builds in CI. Gameplay still needs in-game testing. Gentle Weather and Campfire Comfort are planned features and are not included in the current implementation.
+- Longer days and shorter nights.
+- Crops exposed to rain can get an extra growth stage.
+- Day, night, and rain-growth settings are configurable.
 
-## ✨ Features
+Weather changes and campfire effects are planned, but aren't implemented yet.
 
-| Feature | What it does | Status |
-|---|---|---|
-| 🌧️ **Rain-assisted crop growth** | When an age-based crop successfully grows while exposed to natural rain and open sky, it has a configurable chance to gain one additional growth stage. | Implemented; runtime testing pending |
-| ☀️ **Longer daytime** | Daylight advances more slowly, making the default daytime last about 20 minutes at normal 20 TPS. | Implemented; runtime testing pending |
-| 🌙 **Shorter nights** | Nighttime advances faster, making the default night last about 5 minutes at normal 20 TPS. | Implemented; sleep behavior needs testing |
-| 🌦️ **Gentle Weather** | Longer clear periods and shorter rainstorms, with rain durations targeted at 5–10 minutes. | Planned |
-| 🔥 **Campfire Comfort** | A cozy campfire-area effect intended to remove Mining Fatigue and Weakness and provide Regeneration I. | Planned |
+## Versions
 
-The current rain-growth implementation looks for an integer block-state property named `age` and handles Forge's post-growth event. Other crops or mods need in-game compatibility checks before support can be guaranteed.
+✅ = CI build passes. In-game testing may still be needed.  
+❌ = not built yet.
 
-## ⚙️ Configuration
+| Minecraft | Forge | Fabric | NeoForge |
+|---|:---:|:---:|:---:|
+| 1.20.1 | ✅* | ❌ | ❌ |
+| 1.21.1 | ❌ | ❌ | ❌ |
+| 1.21.11 | ❌ | ❌ | ❌ |
+| 26.1 | ❌ | ❌ | ❌ |
+| 26.1.1 | ❌ | ❌ | ❌ |
+| 26.2 | ❌ | ❌ | ❌ |
+| 26.3 | ❌ | ❌ | ❌ |
 
-Gentle Seasons uses a Forge common config, normally located at `config/gentleseasons-common.toml`.
+* Forge 1.20.1 is the only implemented target. A successful build doesn't replace in-game testing. See [SUPPORT_MATRIX.md](SUPPORT_MATRIX.md).
 
-The current default settings are:
+## Uploading mod jars
 
-```toml
-[time]
-	# Daylight duration multiplier. 1.0 keeps vanilla timing; 2.0 makes daylight progress at half speed.
-	# Range: 1.0 ~ 8.0
-	dayLengthMultiplier = 2.0
-	# Night duration multiplier. 1.0 keeps vanilla timing; 0.5 makes night progress at twice the vanilla speed.
-	# Range: 0.1 ~ 1.0
-	nightLengthMultiplier = 0.5
+Put each version of the mod in its matching version-and-loader folder:
 
-[crops]
-	# Chance to grant one additional age stage after a crop naturally grows while exposed to rain. 0.5 means 50%.
-	# Range: 0.0 ~ 1.0
-	rainGrowthBonusChance = 0.5
+```text
+targets/<minecraft-version>/<loader>/
 ```
 
-| Option | Default | Meaning |
-|---|---:|---|
-| `dayLengthMultiplier` | `2.0` | Makes daylight progress at half the vanilla rate. |
-| `nightLengthMultiplier` | `0.5` | Makes nighttime progress at twice the vanilla rate. |
-| `rainGrowthBonusChance` | `0.5` | Gives a 50% chance of an extra age stage when eligible crop growth occurs during exposed rain. |
+Examples:
 
-Use `1.0` for vanilla speed for either time period. The mod respects the `doDaylightCycle` gamerule. Sleep, commands that change time, weather transitions, and modded crops still need runtime testing.
+- Forge 1.20.1: `targets/1.20.1/forge/gentle-seasons+mc1.20.1-forge.jar`
+- Fabric 1.21.1: `targets/1.21.1/fabric/gentle-seasons+mc1.21.1-fabric.jar`
+- NeoForge 26.1: `targets/26.1/neoforge/gentle-seasons+mc26.1-neoforge.jar`
 
-## 🧪 Testing checklist
+Upload the `.jar` to the matching folder in GitHub, then update that folder's `TARGET.json` when its status changes. Don't mark a target as runtime-tested until you've tested it in-game.
 
-Test in a disposable world before using the mod in a main save.
+For public downloads, also attach the jar to a [GitHub Release](https://github.com/wtfyls/Gentle-Seasons/releases/new). Use a versioned tag, such as `v1.0.0`, and attach only builds for the versions listed in that release.
 
-- Toggle the daylight cycle with `/gamerule doDaylightCycle true` and `/gamerule doDaylightCycle false`.
-- Compare the timing after `/time set day` and `/time set night`.
-- Test sleeping in a bed in single-player and on a dedicated server.
-- Use `/weather rain` and make sure crops are exposed to the sky.
-- Test vanilla crops first, then modded age-based crops such as those added by farming mods.
-- Check that mature crops do not grow past their maximum age and that the server log remains clean.
+## Build
 
-There is no custom `/lunchtime debug growth` command registered in the current source.
-
-## 🛠️ Build from source
-
-Requirements: **Java 17** and **Gradle 8.8**.
+Requirements: Java 17 and Gradle 8.8.
 
 ```bash
 gradle build
 ```
 
-The compiled mod jar is produced in `build/libs/`. GitHub Actions runs the target-matrix validation and Forge 1.20.1 build on pushes and pull requests, then uploads the built jar as a workflow artifact.
+The jar is generated in `build/libs/`. GitHub Actions builds Forge 1.20.1 and uploads the jar as a workflow artifact.
 
-- [Latest GitHub Actions runs](https://github.com/wtfyls/Gentle-Seasons/actions)
-- [Minecraft / loader support matrix](SUPPORT_MATRIX.md)
-- [Contributing guide](CONTRIBUTING.md)
-- [Repository page and release setup checklist](docs/GITHUB_PAGE_AND_RELEASE_SETUP.md)
-- [v1.0.0 draft release notes](docs/releases/v1.0.0-DRAFT.md)
+[Builds](https://github.com/wtfyls/Gentle-Seasons/actions) · [Releases](https://github.com/wtfyls/Gentle-Seasons/releases) · [CurseForge](https://www.curseforge.com/minecraft/mc-mods/labs-gentle-seasons)
 
-## 📦 Downloads
+## Config
 
-No public GitHub release has been published yet. Until a release is available, the CI artifact is a development build, not an officially runtime-tested release.
+The config is created at `config/gentleseasons-common.toml`.
 
-- [CurseForge project page](https://www.curseforge.com/minecraft/mc-mods/labs-gentle-seasons)
-- [GitHub Releases](https://github.com/wtfyls/Gentle-Seasons/releases)
-- [GitHub Actions artifacts](https://github.com/wtfyls/Gentle-Seasons/actions)
+| Setting | Default |
+|---|---:|
+| `dayLengthMultiplier` | `2.0` |
+| `nightLengthMultiplier` | `0.5` |
+| `rainGrowthBonusChance` | `0.5` |
 
-## 👤 Credits
+## License
 
-Created by **Fierolam** (`@wtfyls`).
-
-## 📄 License
-
-**All Rights Reserved (ARR).** The project is proprietary; use, modification, and redistribution require prior written permission. See [LICENSE](LICENSE).
+All Rights Reserved. See [LICENSE](LICENSE).

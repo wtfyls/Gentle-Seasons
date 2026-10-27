@@ -47,7 +47,7 @@ Examples:
 - Fabric 1.21.1: `targets/1.21.1/fabric/gentle-seasons+mc1.21.1-fabric.jar`
 - NeoForge 26.1: `targets/26.1/neoforge/gentle-seasons+mc26.1-neoforge.jar`
 
-Upload the `.jar` to the matching folder in GitHub, then update that folder's `TARGET.json` when its status changes. Don't mark a target as runtime-tested until you've tested it in-game.
+In GitHub, open the matching folder, choose **Add file → Upload files**, and upload the `.jar`. For the current build, use [`targets/1.20.1/forge/`](https://github.com/wtfyls/Gentle-Seasons/tree/main/targets/1.20.1/forge). The built jar starts in `build/libs/`; copy it there and use the filename above. Update that folder's `TARGET.json` when its status changes. Don't mark a target as runtime-tested until you've tested it in-game.
 
 For public downloads, also attach the jar to a [GitHub Release](https://github.com/wtfyls/Gentle-Seasons/releases/new). Use a versioned tag, such as `v1.0.0`, and attach only builds for the versions listed in that release.
 

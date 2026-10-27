@@ -1,0 +1,10 @@
+{
+  "minecraft_version": "1.21.1",
+  "loader": "fabric",
+  "java_version": 21,
+  "status": "scaffold-only",
+  "release_status": "not-published",
+  "project_path": null,
+  "artifact_name": "gentle-seasons+mc1.21.1-fabric.jar",
+  "notes": "Roadmap target only. No loader/version-specific implementation or downloadable artifact is available for this target yet."
+}

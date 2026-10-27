@@ -1,0 +1,10 @@
+{
+  "minecraft_version": "26.1",
+  "loader": "neoforge",
+  "java_version": 25,
+  "status": "scaffold-only",
+  "release_status": "not-published",
+  "project_path": null,
+  "artifact_name": "gentle-seasons+mc26.1-neoforge.jar",
+  "notes": "Roadmap target only. No loader/version-specific implementation or downloadable artifact is available for this target yet."
+}

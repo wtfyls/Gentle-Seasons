@@ -18,7 +18,7 @@
 ## Notes
 
 - Only the **Forge 1.20.1** project is implemented in the root Gradle build.
-- CI compilation does not confirm the time-cycle behavior, rain growth behavior, multiplayer sleep behavior, or compatibility with third-party crops.
+- CI compilation does not confirm daylight duration, shortened nights, multiplayer sleep behavior, `/time` commands, the daylight-cycle gamerule, or compatibility with third-party crops.
 - All other listed loader/version combinations are planned targets, not supported downloads.
 - Target folders are under `targets/<version>/<loader>/`; each `TARGET.json` records its status.
 - Java targets: 1.20.1 uses Java 17; 1.21.1 and 1.21.11 use Java 21; 26.1, 26.1.1, 26.2, and 26.3 use Java 25.

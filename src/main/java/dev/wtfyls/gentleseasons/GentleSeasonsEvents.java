@@ -16,12 +16,16 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 public final class GentleSeasonsEvents {
+    private static final long FULL_DAY_TICKS = 24_000L;
+    private static final long DAYLIGHT_END_TICK = 12_000L;
+
     /*
-     * Vanilla advances day time by one tick per server tick. Accumulating the
-     * fractional correction and occasionally rewinding one tick slows that
-     * clock without continuously resetting the time or disabling sleeping.
+     * Time is integer-valued in vanilla. Accumulating fractional corrections
+     * lets the daylight and night portions run at different speeds without
+     * repeatedly setting an absolute time. The vanilla daylight-cycle gamerule
+     * remains authoritative.
      */
-    private final Map<ServerLevel, Double> dayTimeCorrections = new WeakHashMap<>();
+    private final Map<ServerLevel, CycleCorrection> cycleCorrections = new WeakHashMap<>();
 
     @SubscribeEvent
     public void onServerTick(TickEvent.ServerTickEvent event) {
@@ -30,25 +34,44 @@ public final class GentleSeasonsEvents {
         }
 
         MinecraftServer server = event.getServer();
-        double multiplier = GentleSeasonsConfig.DAY_LENGTH_MULTIPLIER.get();
-        if (multiplier <= 1.0) {
-            dayTimeCorrections.clear();
-            return;
-        }
+        double dayMultiplier = GentleSeasonsConfig.DAY_LENGTH_MULTIPLIER.get();
+        double nightMultiplier = GentleSeasonsConfig.NIGHT_LENGTH_MULTIPLIER.get();
 
-        double correctionPerTick = 1.0 - (1.0 / multiplier);
         for (ServerLevel level : server.getAllLevels()) {
             if (!level.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
+                cycleCorrections.remove(level);
                 continue;
             }
 
-            double accumulated = dayTimeCorrections.getOrDefault(level, 0.0) + correctionPerTick;
-            long wholeTicks = (long) accumulated;
+            long dayTime = level.getDayTime();
+            long timeOfDay = Math.floorMod(dayTime, FULL_DAY_TICKS);
+            boolean daylight = timeOfDay < DAYLIGHT_END_TICK;
+
+            CycleCorrection previous = cycleCorrections.get(level);
+            double accumulated = previous != null && previous.daylight() == daylight
+                    ? previous.accumulated()
+                    : 0.0;
+
+            double correctionPerTick;
+            if (daylight) {
+                correctionPerTick = 1.0 - (1.0 / dayMultiplier);
+            } else {
+                correctionPerTick = (1.0 / nightMultiplier) - 1.0;
+            }
+
+            // No time correction is necessary at vanilla speed.
+            if (correctionPerTick <= 0.0) {
+                cycleCorrections.put(level, new CycleCorrection(daylight, 0.0));
+                continue;
+            }
+
+            accumulated += correctionPerTick;
+            long wholeTicks = (long) Math.floor(accumulated + 1.0e-9);
             if (wholeTicks > 0) {
-                level.setDayTime(level.getDayTime() - wholeTicks);
+                level.setDayTime(dayTime + (daylight ? -wholeTicks : wholeTicks));
                 accumulated -= wholeTicks;
             }
-            dayTimeCorrections.put(level, accumulated);
+            cycleCorrections.put(level, new CycleCorrection(daylight, accumulated));
         }
     }
 
@@ -85,7 +108,7 @@ public final class GentleSeasonsEvents {
 
     @SubscribeEvent
     public void onServerStopped(ServerStoppedEvent event) {
-        dayTimeCorrections.clear();
+        cycleCorrections.clear();
     }
 
     private static IntegerProperty findAgeProperty(BlockState state) {
@@ -96,4 +119,6 @@ public final class GentleSeasonsEvents {
         }
         return null;
     }
+
+    private record CycleCorrection(boolean daylight, double accumulated) {}
 }

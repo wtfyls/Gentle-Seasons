@@ -2,16 +2,16 @@
 
 [![Build](https://github.com/wtfyls/Gentle-Seasons/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/wtfyls/Gentle-Seasons/actions/workflows/build.yml)
 
-**Gentle Seasons** is a small Minecraft mod focused on a calmer day/night rhythm and rain that helps crops grow.
+**Gentle Seasons** is a small Minecraft mod for longer daylight, shorter nights, and rain that helps crops grow.
 
 ## Features
 
-- **Longer days** — slows the daylight cycle without disabling the daylight-cycle gamerule or replacing normal sleep behavior.
-- **Rain-assisted crop growth** — exposed crops can receive an extra growth stage when a normal crop-growth event succeeds during rain.
-- **Configurable behavior** — adjust the day-length multiplier and rain growth bonus chance in the common config.
+- **Longer days, shorter nights** — daylight and night duration have separate multipliers; the daylight-cycle gamerule is respected.
+- **Rain-assisted crop growth** — exposed crops can receive an extra growth stage when a compatible crop-growth event succeeds during rain.
+- **Configurable behavior** — adjust day and night duration and the rain growth bonus chance in the common config.
 - **Version-specific tracking** — each Minecraft version and loader target is tracked separately so planned ports are not confused with verified builds.
 
-The current implementation targets **Minecraft 1.20.1 with Forge**. CI compilation confirms that the project builds; in-game behavior still needs testing before this target can be considered runtime-verified. No public release is available yet.
+The current implementation targets **Minecraft 1.20.1 with Forge**. CI compilation checks that the project builds; in-game behavior still needs testing before this target can be considered runtime-verified. No public release is available yet.
 
 ## Minecraft versions and loaders
 
@@ -28,6 +28,16 @@ These are the only versions currently in the project roadmap. A ✅ means the Ge
 | 26.3 | ❌ | ❌ | ❌ |
 
 *The Forge 1.20.1 target is the only implemented build. CI compilation does not confirm gameplay behavior. For details, see [SUPPORT_MATRIX.md](SUPPORT_MATRIX.md). Planned targets are not downloadable releases; each needs a loader/version-specific implementation, a successful build, and runtime testing.
+
+## Configuration
+
+Forge creates a common config file for Gentle Seasons. The default values are:
+
+- `dayLengthMultiplier = 2.0` — daylight progresses at half the vanilla rate.
+- `nightLengthMultiplier = 0.5` — nighttime progresses at twice the vanilla rate.
+- `rainGrowthBonusChance = 0.5` — a 50% chance of an extra growth stage after a compatible crop successfully grows while exposed to rain.
+
+Setting either duration multiplier to `1.0` keeps that part of the cycle at vanilla speed. The daylight-cycle gamerule remains in control; sleep and command interactions still need in-game validation.
 
 ## Build the current Forge 1.20.1 project
 
